@@ -4,16 +4,16 @@ import UploadForm from './components/UploadForm'
 import LoadingSpinner from './components/LoadingSpinner'
 import ErrorMessage from './components/ErrorMessage'
 import './App.css'
-import meta.env
+
 export default function App() {
-  const [caption, setCaption] = useState(null)
+  const [caption, setCaption] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState(null)
+  const [error, setError] = useState<string | null>(null)
 
-  // ✅ Correct env usage (Vite)
-  const backend = import.meta.env.backend_url || 'http://localhost:8000'
+  // ✅ FIXED env usage
+  const backend = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
 
-  async function generateCaption(file) {
+  async function generateCaption(file: File) {
     setLoading(true)
     setError(null)
     setCaption(null)
@@ -22,7 +22,6 @@ export default function App() {
       const form = new FormData()
       form.append('file', file)
 
-      // ✅ FIXED fetch
       const res = await fetch(`${backend}/generate-caption`, {
         method: 'POST',
         body: form
@@ -35,7 +34,7 @@ export default function App() {
       const data = await res.json()
       setCaption(data.caption)
 
-    } catch (err) {
+    } catch (err: any) {
       const msg = err?.message || 'Caption generation failed'
       setError(msg)
     } finally {
