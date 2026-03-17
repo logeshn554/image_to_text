@@ -6,27 +6,37 @@ import ErrorMessage from './components/ErrorMessage'
 import './App.css'
 
 export default function App() {
-  const [caption, setCaption] = useState<string | null>(null)
+  const [caption, setCaption] = useState(null)
   const [loading, setLoading] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [error, setError] = useState(null)
 
+  // ✅ Correct env usage (Vite)
   const backend = import.meta.env.backend_url || 'http://localhost:8000'
 
-  async function generateCaption(file: File) {
+  async function generateCaption(file) {
     setLoading(true)
     setError(null)
     setCaption(null)
+
     try {
       const form = new FormData()
       form.append('file', file)
-      const res = await const res = await fetch(`${backend}/generate-caption`, { method: 'POST', body: form })
+
+      // ✅ FIXED fetch
+      const res = await fetch(`${backend}/generate-caption`, {
+        method: 'POST',
+        body: form
+      })
+
       if (!res.ok) {
         throw new Error(`Generation failed: HTTP ${res.status}`)
       }
+
       const data = await res.json()
       setCaption(data.caption)
+
     } catch (err) {
-      const msg = err instanceof Error ? err.message : 'Caption generation failed'
+      const msg = err?.message || 'Caption generation failed'
       setError(msg)
     } finally {
       setLoading(false)
@@ -59,5 +69,3 @@ export default function App() {
     </div>
   )
 }
-
-
