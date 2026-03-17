@@ -10,7 +10,7 @@ export default function App() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const backend = import.meta.env.VITE_API_URL || 'http://localhost:8000'
+  const backend = import.meta.env.backend_url || 'http://localhost:8000'
 
   async function generateCaption(file: File) {
     setLoading(true)
