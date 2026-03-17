@@ -19,7 +19,7 @@ export default function App() {
     try {
       const form = new FormData()
       form.append('file', file)
-      const res = await fetch(`${backend}/generate-caption`, { method: 'POST', body: form })
+      const res = await fetch(`https://logeshn554-image-to-text.hf.space/generate-caption`, { method: 'POST', body: form })
       if (!res.ok) {
         throw new Error(`Generation failed: HTTP ${res.status}`)
       }
